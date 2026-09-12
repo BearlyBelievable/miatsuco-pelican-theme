@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="{% block html_lang %}{{ DEFAULT_LANG }}{% endblock html_lang %}">
+    <head>
+        {% block head %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>{% block title %}{{ SITENAME|striptags }}{% endblock %}</title>
+        <meta
+            name="description"
+            content="{% block meta_description %}{{ SITE_DESCRIPTION }}{% endblock %}"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            href="{{ SITEURL }}/{{ SITE_FAVICON }}"
+        />
+        <meta property="og:site_name" content="{{ SITENAME|striptags }}" />
+        <meta
+            property="og:title"
+            content="{% block og_title %}{{ self.title() }}{% endblock %}"
+        />
+        <meta
+            property="og:description"
+            content="{{ self.meta_description() }}"
+        />
+        <meta
+            property="og:type"
+            content="{% block og_type %}website{% endblock %}"
+        />
+        <meta property="og:url" content="{{ SITEURL }}/{{ output_file }}" />
+        <meta
+            property="og:image"
+            content="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/pictures/logoblack.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="{{ self.og_title() }}" />
+        <meta
+            name="twitter:description"
+            content="{{ self.meta_description() }}"
+        />
+        <meta
+            name="twitter:image"
+            content="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/pictures/logoblack.png"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Karla:wght@400;500;600;700&display=swap"
+        />
+        <link
+            rel="stylesheet"
+            href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/css/main.css"
+        />
+        <script
+            defer
+            src="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/js/main.js"
+        ></script>
+        <style>
+            :root {
+                --logo-mask: url('{{ SITEURL }}/{{ SITELOGO }}');
+            }
+        </style>
+        {% if FEED_ALL_ATOM %}
+        <link
+            href="{{ FEED_DOMAIN }}/{% if FEED_ALL_ATOM_URL %}{{ FEED_ALL_ATOM_URL }}{% else %}{{ FEED_ALL_ATOM }}{% endif %}"
+            type="application/atom+xml"
+            rel="alternate"
+            title="{{ SITENAME|striptags }} Atom Feed"
+        />
+        {% endif %} {% if FEED_ALL_RSS %}
+        <link
+            href="{{ FEED_DOMAIN }}/{% if FEED_ALL_RSS_URL %}{{ FEED_ALL_RSS_URL }}{% else %}{{ FEED_ALL_RSS }}{% endif %}"
+            type="application/rss+xml"
+            rel="alternate"
+            title="{{ SITENAME|striptags }} RSS Feed"
+        />
+        {% endif %} {% block extra_head %}{% endblock extra_head %} {% endblock
+        head %}
+        <script>
+            ;(function () {
+                try {
+                    var stored = localStorage.getItem('miatsuco-theme')
+                    if (stored === 'dark' || stored === 'light') {
+                        document.documentElement.setAttribute(
+                            'data-theme',
+                            stored
+                        )
+                    }
+                } catch (e) {}
+            })()
+        </script>
+    </head>
+
+    <body>
+        <a class="skip-link" href="#main-content">Skip to content</a>
+        {% import 'macros.html' as macros with context %} {% set page_sections =
+        {} %} {% set nav_items = [] %} {% for pg in pages + hidden_pages %} {%
+        if pg.section is defined %} {% if page_sections.update({pg.section:
+        page_sections.get(pg.section, []) + [pg]}) %}{% endif %} {% elif
+        pg.status != 'hidden' %} {% if nav_items.append({'kind': 'link',
+        'order': pg.sortorder|default('999')|string, 'page': pg}) %}{% endif %}
+        {% endif %} {% endfor %} {% for section, section_pages in
+        page_sections.items() %} {% set section_order = (section_pages |
+        map(attribute='sortorder') | map('string') | list | sort)[0] %} {% if
+        nav_items.append({'kind': 'group', 'order': section_order, 'name':
+        section, 'pages': section_pages}) %}{% endif %} {% endfor %} {% set
+        nav_items = nav_items | sort(attribute='order') %}
+        <header class="site-header">
+            <div class="navbar">
+                <a
+                    class="logo"
+                    href="{{ SITEURL }}/"
+                    aria-label="{{ SITENAME }}"
+                    ><span class="logo-mark"></span
+                ></a>
+                <nav class="nav-links" id="navLinks" aria-label="Primary">
+                    {% set is_home = output_file == 'index.html' %}
+                    <a
+                        href="{{ SITEURL }}/"
+                        class="{% if is_home %}active{% endif %}"
+                        {%
+                        if
+                        is_home
+                        %}aria-current="page"
+                        {%
+                        endif
+                        %}
+                        ><span class="pill">Home</span></a
+                    >
+                    {% if categories %} {% set blog_items = [] %} {% for cat,
+                    cat_articles in categories %} {% if
+                    blog_items.append({'title': cat.name, 'url': cat.url,
+                    'save_as': cat.save_as}) %}{% endif %} {% endfor %} {{
+                    macros.nav_group('Blog', blog_items, output_file,
+                    view_all_url=SITEURL + '/blog/archives',
+                    view_all_save_as='blog/archives/index.html') }} {% endif %} {%
+                    for item in nav_items %} {% if item.kind == 'link' %} {% set
+                    is_current_page = item.page.save_as == output_file %}
+                    <a
+                        href="{{ SITEURL }}/{{ item.page.url }}"
+                        class="{% if is_current_page %}active{% endif %}"
+                        {%
+                        if
+                        is_current_page
+                        %}aria-current="page"
+                        {%
+                        endif
+                        %}
+                        ><span class="pill">{{ item.page.title }}</span></a
+                    >
+                    {% else %} {{ macros.nav_group(item.name, item.pages,
+                    output_file) }} {% endif %} {% endfor %} {% for link in
+                    EXTERNAL_NAV_LINKS %}
+                    <a href="{{ link.url }}"
+                        ><span class="pill">{{ link.label }}</span></a
+                    >
+                    {% endfor %}
+                </nav>
+                <div class="navbar-actions">
+                    <div class="theme-toggle">
+                        <input
+                            type="checkbox"
+                            role="switch"
+                            id="themeToggle"
+                            class="theme-toggle-input"
+                            aria-label="Dark mode"
+                        />
+                        <label for="themeToggle" class="theme-toggle-slider">
+                            <span class="theme-toggle-thumb"></span>
+                        </label>
+                    </div>
+                    <button
+                        class="nav-toggle"
+                        id="navToggle"
+                        type="button"
+                        aria-label="Toggle navigation menu"
+                        aria-expanded="false"
+                        aria-controls="navLinks"
+                    >
+                        <span class="nav-toggle-bar"></span>
+                        <span class="nav-toggle-bar"></span>
+                        <span class="nav-toggle-bar"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main id="main-content">
+            <div class="hero">
+                <div class="page-title">
+                    {% block page_title %}{% endblock %}
+                </div>
+            </div>
+            {% block content %}{% endblock %}
+        </main>
+        {% include 'footer.html' %}
+    </body>
+</html>

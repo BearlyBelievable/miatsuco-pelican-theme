@@ -1,0 +1,77 @@
+{% macro nav_group(label, items, current, view_all_url=None,
+view_all_save_as=None) %} {% set group_active = (items | selectattr('save_as',
+'equalto', current) | list | length > 0) or (view_all_save_as and
+view_all_save_as == current) %}
+<div class="dropdown">
+    <button
+        class="dropdown-toggle{% if group_active %} active{% endif %}"
+        type="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+    >
+        {{ label }}
+    </button>
+    <div class="dropdown-menu">
+        <div class="dropdown-menu-inner">
+            {% for item in items %} {% set is_current_page = item.save_as ==
+            current %}
+            <a
+                href="{{ SITEURL }}/{{ item.url }}"
+                class="{% if is_current_page %}active{% endif %}"
+                {%
+                if
+                is_current_page
+                %}aria-current="page"
+                {%
+                endif
+                %}
+                ><div class="pill">{{ item.title }}</div></a
+            >
+            {% endfor %} {% if view_all_url %}
+            <a class="dropdown-view-all" href="{{ view_all_url }}"
+                ><div class="pill">View all</div></a
+            >
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endmacro %} {% macro recent_posts(articles, count=3, heading='Recent posts',
+view_all_url=None) %}
+<section id="content">
+    <h2>{{ heading }}</h2>
+    <ul class="article-list">
+        {% for article in articles[:count] %}
+        <li>
+            <a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a>
+            <p class="article-meta">
+                {{ article.locale_date }}{% if article.category %} &middot;
+                <a href="{{ SITEURL }}/{{ article.category.url }}"
+                    >{{ article.category }}</a
+                >{% endif %}
+            </p>
+            {% if article.summary %} {{ article.summary }} {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <a class="btn-link" href="{{ view_all_url or (SITEURL ~ '/blog/archives') }}"
+        ><div class="btn">View all posts</div></a
+    >
+</section>
+{% endmacro %} {% macro pagination(paginator, page, previous_page, next_page) %}
+{% if paginator.num_pages > 1 %}
+<nav class="pagination" aria-label="Pagination">
+    {% if previous_page %}
+    <a href="{{ SITEURL }}/{{ previous_page.url }}">Newer</a>
+    {% else %}
+    <span class="pagination-disabled">Newer</span>
+    {% endif %}
+    <span class="pagination-status"
+        >Page {{ page.number }} of {{ paginator.num_pages }}</span
+    >
+    {% if next_page %}
+    <a href="{{ SITEURL }}/{{ next_page.url }}">Older</a>
+    {% else %}
+    <span class="pagination-disabled">Older</span>
+    {% endif %}
+</nav>
+{% endif %} {% endmacro %}

@@ -1,0 +1,13 @@
+<footer>
+    {% set footer_pages = (pages + hidden_pages) | selectattr('footer',
+    'defined') | sort(attribute='sortorder') %}
+    <nav class="footer-nav" aria-label="Footer">
+        <a href="{{ SITEURL }}/">Home</a>
+        {% for pg in footer_pages %}
+        <a href="{{ SITEURL }}/{{ pg.url }}">{{ pg.title }}</a>
+        {% endfor %}
+    </nav>
+    <p class="footer-note">
+        Built with <a rel="nofollow" href="https://getpelican.com/">Pelican</a>.
+    </p>
+</footer>
