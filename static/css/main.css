@@ -1151,30 +1151,20 @@ details > :not(summary) {
     opacity: 0.5;
 }
 
-/* Application form */
+/* Forms */
 
-.application-form {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    background: var(--surface);
+label,
+legend {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 500;
 }
 
-.application-form .btn {
-    margin-top: 0;
+legend {
+    padding: 0;
+    width: 100%;
 }
 
-.form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.form-field[hidden] {
-    display: none;
-}
-
-.form-field-fieldset {
+fieldset {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -1184,26 +1174,11 @@ details > :not(summary) {
     min-width: 0;
 }
 
-.form-field label,
-.form-field-label {
-    font-family: 'Fredoka', sans-serif;
-    font-weight: 500;
-}
-
-legend.form-field-label {
-    padding: 0;
-    width: 100%;
-}
-
-.required-marker {
-    color: var(--danger-text);
-}
-
-.form-field input[type='text'],
-.form-field input[type='email'],
-.form-field input[type='number'],
-.form-field select,
-.form-field textarea {
+input[type='text'],
+input[type='email'],
+input[type='number'],
+select,
+textarea {
     min-height: 44px;
     padding: 8px 14px;
     border-radius: var(--radius);
@@ -1213,151 +1188,24 @@ legend.form-field-label {
     box-shadow: inset 0 1px 2px rgba(46, 42, 69, 0.08);
 }
 
-.form-field input[type='number'] {
+input[type='number'] {
     width: 100px;
 }
 
-.form-field select {
+select {
     max-width: 420px;
 }
 
-.form-field input[type='text']:focus,
-.form-field input[type='email']:focus,
-.form-field input[type='number']:focus,
-.form-field select:focus,
-.form-field textarea:focus {
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+select:focus,
+textarea:focus {
     outline: 2px solid var(--accent);
     outline-offset: 1px;
 }
 
-.form-field textarea {
+textarea {
     min-height: 80px;
     resize: vertical;
-}
-
-.form-field-note {
-    margin-bottom: 0;
-    padding: 0;
-    border-radius: var(--radius);
-    background: var(--note-bg);
-}
-
-.form-field-note summary,
-.form-field-note p {
-    color: var(--note-text);
-}
-
-.form-field-note summary {
-    margin: 0;
-    padding: 10px 14px;
-    font-size: 0.9375rem;
-}
-
-.form-field-note summary::after {
-    border-color: var(--note-text);
-}
-
-.form-field-note-title {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 700;
-}
-
-.form-field-note-icon {
-    width: 18px;
-    height: 18px;
-    flex: 0 0 auto;
-}
-
-.form-field-note:not([open]) summary {
-    margin-bottom: 0;
-    padding-bottom: 10px;
-}
-
-.form-field-note p {
-    margin: 0;
-    padding: 0 14px 10px;
-    font-size: 0.875rem;
-}
-
-.form-field-note--info {
-    --note-bg: var(--note-info-bg);
-    --note-text: var(--note-info-text);
-}
-
-.form-field-note--caution {
-    --note-bg: var(--note-caution-bg);
-    --note-text: var(--note-caution-text);
-}
-
-.form-field-note--warning {
-    --note-bg: var(--note-warning-bg);
-    --note-text: var(--note-warning-text);
-}
-
-.radio-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-self: flex-start;
-    gap: 8px 20px;
-    padding: 0 15.5px;
-}
-
-.checkbox-group {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-start;
-    padding: 0 15.5px;
-}
-
-.radio-group label,
-.checkbox-group label {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 0;
-    min-height: 44px;
-    font-weight: 400;
-}
-
-.radio-group input,
-.checkbox-group input {
-    margin: 0;
-}
-
-.form-message {
-    padding: 12px 16px;
-    border-radius: var(--radius);
-    font-size: 0.9375rem;
-}
-
-.form-message.is-success {
-    background: var(--success-bg);
-    color: var(--success-text);
-}
-
-.form-message.is-error {
-    background: var(--danger-bg);
-    color: var(--danger-text);
-}
-
-.form-field.has-error input[type='text'],
-.form-field.has-error input[type='email'],
-.form-field.has-error input[type='number'],
-.form-field.has-error select,
-.form-field.has-error textarea {
-    border-color: var(--danger-text);
-    box-shadow:
-        inset 0 1px 2px rgba(46, 42, 69, 0.08),
-        0 0 0 2px color-mix(in srgb, var(--danger-text) 30%, transparent),
-        0 0 8px 2px color-mix(in srgb, var(--danger-text) 35%, transparent);
-}
-
-.form-field.has-error .radio-group,
-.form-field.has-error .checkbox-group {
-    border-radius: var(--radius);
-    box-shadow:
-        0 0 0 2px var(--danger-text),
-        0 0 8px 2px color-mix(in srgb, var(--danger-text) 40%, transparent);
 }
